@@ -14,11 +14,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _screenIndex = 0;
 
-  final List<Widget> screens = [
+  final List<Widget> screens = const [
     HomeScreen(),
-    ProfileScreen(),
     CatalogueScreen(),
     CalendarScreen(),
+    ProfileScreen(),
   ];
 
   void _onBottomNavbarTapped(int index) {
@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Fitness App')),
-      body: screens.elementAt(_screenIndex),
+      body: IndexedStack(index: _screenIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onBottomNavbarTapped,
         type: BottomNavigationBarType.fixed,
