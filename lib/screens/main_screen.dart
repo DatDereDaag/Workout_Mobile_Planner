@@ -37,16 +37,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(screenTitles[_screenIndex]),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontFamily: 'Hindsight2020',
-        ),
-        backgroundColor: Color(0xFFCF0F47),
-        elevation: 2,
-      ),
       body: IndexedStack(index: _screenIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onBottomNavbarTapped,
@@ -56,6 +46,16 @@ class _MainScreenState extends State<MainScreen> {
         showUnselectedLabels: true,
         selectedItemColor: Colors.red.shade700,
         unselectedItemColor: Colors.red.shade100,
+        selectedLabelStyle: TextStyle(
+          color: Colors.red.shade700,
+          fontSize: 14,
+          fontFamily: 'Hindsight2020',
+        ),
+        unselectedLabelStyle: TextStyle(
+          color: Colors.red.shade700,
+          fontSize: 14,
+          fontFamily: 'Hindsight2020',
+        ),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
