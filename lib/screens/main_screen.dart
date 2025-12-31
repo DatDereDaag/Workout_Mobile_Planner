@@ -21,6 +21,13 @@ class _MainScreenState extends State<MainScreen> {
     ProfileScreen(),
   ];
 
+  final List<String> screenTitles = const [
+    'Home',
+    'Catalogue',
+    'Calendar',
+    'Profile',
+  ];
+
   void _onBottomNavbarTapped(int index) {
     setState(() {
       _screenIndex = index;
@@ -30,7 +37,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Fitness App')),
+      appBar: AppBar(
+        title: Text(screenTitles[_screenIndex]),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontFamily: 'Hindsight2020',
+        ),
+        backgroundColor: Color(0xFFCF0F47),
+        elevation: 2,
+      ),
       body: IndexedStack(index: _screenIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onBottomNavbarTapped,
