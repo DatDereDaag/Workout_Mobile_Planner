@@ -1,11 +1,31 @@
+import 'package:hive/hive.dart';
+
+part 'exercise.g.dart';
+
+@HiveType(typeId: 0)
 class Exercise {
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
   final String name;
+
+  @HiveField(2)
   final String equipment;
+
+  @HiveField(3)
   final String target;
+
+  @HiveField(4)
   final String bodyPart;
+
+  @HiveField(5)
   final String gifUrl;
+
+  @HiveField(6)
   final List<String> instructions;
+
+  @HiveField(7)
   final List<String> secondaryMuscles;
 
   const Exercise({
