@@ -1,4 +1,6 @@
 import 'package:fitness_app/models/exercise.dart';
+import 'package:fitness_app/models/workout.dart';
+import 'package:fitness_app/models/workout_exercise.dart';
 import 'package:fitness_app/screens/main_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,8 +14,11 @@ Future<void> main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ExerciseAdapter());
+  Hive.registerAdapter(WorkoutAdapter());
 
   await Hive.openBox<Exercise>('exerciseBox');
+  await Hive.openBox<Workout>('workoutBox');
+  await Hive.openBox<WorkoutExercise>('workoutExerciseBox');
 
   runApp(const MyApp());
 }
