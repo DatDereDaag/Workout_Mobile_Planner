@@ -1,3 +1,4 @@
+import 'package:fitness_app/screens/home/utils/exercise_card_clipper.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -14,37 +15,9 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 0, top: 15, left: 15, right: 15),
-      child: Container(
-        padding: EdgeInsets.all(25.0),
-        decoration: BoxDecoration(
-          color: Color(0xFFCF0F47),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              exerciseName,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            Text(
-              description,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            //Image.network(gifURL),
-          ],
-        ),
-      ),
+    return ClipPath(
+      clipper: ExerciseCardClipper1(),
+      child: Container(width: 400, height: 200, color: Colors.blue),
     );
   }
 }

@@ -65,6 +65,7 @@ flutter:
     - lib/assets/images/squat.jpg
     - lib/assets/images/calves.jpg
     - lib/assets/images/deadlift.jpg
+    - .env
   fonts:
     - family: Hindsight2020
       fonts:
