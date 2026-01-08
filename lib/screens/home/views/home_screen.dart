@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: 1,
+        itemCount: 5,
         itemBuilder: (context, index) {
           return ExerciseCard(
             exerciseName: "exerciseName",

@@ -59,17 +59,20 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - lib/assets/images/ab.jpg
-    - lib/assets/images/bench-press.jpg
-    - lib/assets/images/bicep-curl.jpg
-    - lib/assets/images/squat.jpg
-    - lib/assets/images/calves.jpg
-    - lib/assets/images/deadlift.jpg
+    - assets/images/ab.jpg
+    - assets/images/bench-press.jpg
+    - assets/images/bicep-curl.jpg
+    - assets/images/squat.jpg
+    - assets/images/calves.jpg
+    - assets/images/deadlift.jpg
     - .env
   fonts:
     - family: Hindsight2020
       fonts:
-        - asset: lib/assets/fonts/Hindsight 2020.otf
+        - asset: assets/fonts/Hindsight 2020.otf
+    - family: BlackOps
+      fonts:
+        - asset: assets/fonts/BlackOpsOne-Regular.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
