@@ -1,3 +1,4 @@
+import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/screens/calendar/views/calendar_screen.dart';
 import 'package:fitness_app/screens/catalogue/views/catalogue_screen.dart';
 import 'package:fitness_app/screens/home/views/home_screen.dart';
@@ -44,16 +45,16 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _screenIndex,
         showSelectedLabels: true,
         showUnselectedLabels: true,
-        selectedItemColor: const Color.fromARGB(255, 255, 240, 242),
-        unselectedItemColor: const Color.fromARGB(255, 186, 142, 146),
-        backgroundColor: const Color.fromARGB(255, 123, 17, 17),
+        selectedItemColor: AppColors.textColor,
+        unselectedItemColor: AppColors.accentColor,
+        backgroundColor: AppColors.primaryColor,
         selectedLabelStyle: TextStyle(
-          color: const Color.fromARGB(255, 255, 240, 242),
+          color: AppColors.textColor,
           fontSize: 14,
           fontFamily: 'Hindsight2020',
         ),
         unselectedLabelStyle: TextStyle(
-          color: const Color.fromARGB(255, 186, 142, 146),
+          color: AppColors.accentColor,
           fontSize: 14,
           fontFamily: 'Hindsight2020',
         ),

@@ -1,3 +1,4 @@
+import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/models/exercise.dart';
 import 'package:fitness_app/models/workout.dart';
 import 'package:fitness_app/models/workout_exercise.dart';
@@ -31,9 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MainScreen(),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFCF0F47)),
-      ),
+      theme: ThemeData(scaffoldBackgroundColor: AppColors.backgroundColor),
     );
   }
 }
