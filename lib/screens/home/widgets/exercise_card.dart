@@ -22,34 +22,31 @@ class ExerciseCard extends StatefulWidget {
 
 class _ExerciseCardState extends State<ExerciseCard>
     with SingleTickerProviderStateMixin {
-  bool isExpanded = false;
   late AnimationController _animationController;
 
   late Animation<double> _imageRotationAnimation;
-  late Animation<double> _imageTranslationAnimationX;
-  late Animation<double> _imageTranslationAnimationY;
+
+  bool isExpanded = false;
+
+  final double _originalCardHeight = 160.0;
+  final double _expandedCardHeight = 340.0;
+
+  final double _expandedCardWidth = 240.0;
+
+  final double _cardTopPadding = 32.0;
+  final double _cardSidePadding = 16.0;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 500),
     );
 
     _imageRotationAnimation = Tween<double>(
       begin: 0,
-      end: (pi / 2),
-    ).animate(_animationController);
-
-    _imageTranslationAnimationX = Tween<double>(
-      begin: 0,
-      end: -94.0,
-    ).animate(_animationController);
-
-    _imageTranslationAnimationY = Tween<double>(
-      begin: 0,
-      end: 75,
+      end: (pi * 2),
     ).animate(_animationController);
   }
 
@@ -72,12 +69,13 @@ class _ExerciseCardState extends State<ExerciseCard>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggleExpaned,
-      child: AnimatedPadding(
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeInOut,
-        padding: isExpanded
-            ? EdgeInsets.only(left: 16.0, bottom: 164.0, right: 16.0, top: 32.0)
-            : EdgeInsets.only(left: 16.0, bottom: 0, right: 16.0, top: 32.0),
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: _cardSidePadding,
+          bottom: 0,
+          right: _cardSidePadding,
+          top: _cardTopPadding,
+        ),
         child: AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) {
@@ -87,20 +85,21 @@ class _ExerciseCardState extends State<ExerciseCard>
                 Transform(
                   alignment: Alignment.center,
                   transform: Matrix4.identity()
-                    ..translateByDouble(
-                      _imageTranslationAnimationX.value,
-                      _imageTranslationAnimationY.value,
-                      0,
-                      1,
-                    )
-                    ..rotateZ(_imageRotationAnimation.value),
+                    ..rotateY(_imageRotationAnimation.value),
 
                   child: ClipPath(
                     clipper: ExerciseCardClipper(),
                     child: Stack(
                       children: [
-                        Container(
-                          height: 160,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          height: isExpanded
+                              ? _expandedCardHeight
+                              : _originalCardHeight,
+                          width: isExpanded
+                              ? _expandedCardWidth
+                              : MediaQuery.of(context).size.width -
+                                    (2 * _cardSidePadding),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/bicep-curl.jpg'),
@@ -108,8 +107,15 @@ class _ExerciseCardState extends State<ExerciseCard>
                             ),
                           ),
                         ),
-                        Container(
-                          height: 160,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          height: isExpanded
+                              ? _expandedCardHeight
+                              : _originalCardHeight,
+                          width: isExpanded
+                              ? _expandedCardWidth
+                              : MediaQuery.of(context).size.width -
+                                    (2 * _cardSidePadding),
                           color: const Color.fromARGB(
                             255,
                             42,
@@ -118,8 +124,15 @@ class _ExerciseCardState extends State<ExerciseCard>
                           ).withValues(alpha: 0.4),
                         ),
                         //Gradient Overlay top left to bottom right
-                        Container(
-                          height: 160,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          height: isExpanded
+                              ? _expandedCardHeight
+                              : _originalCardHeight,
+                          width: isExpanded
+                              ? _expandedCardWidth
+                              : MediaQuery.of(context).size.width -
+                                    (2 * _cardSidePadding),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -139,8 +152,15 @@ class _ExerciseCardState extends State<ExerciseCard>
                           ),
                         ),
                         //Gradient Overlay top right to bottom left
-                        Container(
-                          height: 160,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          height: isExpanded
+                              ? _expandedCardHeight
+                              : _originalCardHeight,
+                          width: isExpanded
+                              ? _expandedCardWidth
+                              : MediaQuery.of(context).size.width -
+                                    (2 * _cardSidePadding),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topRight,
