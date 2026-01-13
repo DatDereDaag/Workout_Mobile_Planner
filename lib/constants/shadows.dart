@@ -42,4 +42,37 @@ class AppShadows {
       offset: Offset(0, -10),
     ),
   ];
+
+  static const List<BoxShadow> containerShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.25),
+      blurRadius: 55,
+      spreadRadius: 0,
+      offset: Offset(0, 54),
+    ),
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.12),
+      blurRadius: 30,
+      spreadRadius: 0,
+      offset: Offset(0, -12),
+    ),
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.12),
+      blurRadius: 6,
+      spreadRadius: 0,
+      offset: Offset(0, 4),
+    ),
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.17),
+      blurRadius: 13,
+      spreadRadius: 0,
+      offset: Offset(0, 12),
+    ),
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.09),
+      blurRadius: 5,
+      spreadRadius: 0,
+      offset: Offset(0, -3),
+    ),
+  ];
 }

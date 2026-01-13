@@ -25,28 +25,55 @@ class _ExerciseCardState extends State<ExerciseCard>
   late AnimationController _animationController;
 
   late Animation<double> _imageRotationAnimation;
+  late Animation<double> _detailsContainerFadeInAnimation;
+  late Animation<double> _titlePositionAnimation;
+  late Animation<double> _titleFontSizeAniamtion;
+  late Animation<double> _titlePaddingAnimation;
 
   bool isExpanded = false;
 
   final double _originalCardHeight = 160.0;
-  final double _expandedCardHeight = 340.0;
+  final double _expandedCardHeight = 420.0;
 
   final double _expandedCardWidth = 240.0;
 
   final double _cardTopPadding = 32.0;
   final double _cardSidePadding = 16.0;
 
+  final double _originalTitleHeight = 34;
+  final double _expandedTitleHeight = 40;
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
     );
 
     _imageRotationAnimation = Tween<double>(
       begin: 0,
-      end: (pi * 2),
+      end: (pi),
+    ).animate(_animationController);
+
+    _detailsContainerFadeInAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animationController);
+
+    _titlePositionAnimation = Tween<double>(
+      begin: 0,
+      end: 95,
+    ).animate(_animationController);
+
+    _titleFontSizeAniamtion = Tween<double>(
+      begin: 18,
+      end: 20,
+    ).animate(_animationController);
+
+    _titlePaddingAnimation = Tween<double>(
+      begin: 4,
+      end: 6.0,
     ).animate(_animationController);
   }
 
@@ -86,29 +113,37 @@ class _ExerciseCardState extends State<ExerciseCard>
                   alignment: Alignment.center,
                   transform: Matrix4.identity()
                     ..rotateY(_imageRotationAnimation.value),
-
                   child: ClipPath(
                     clipper: ExerciseCardClipper(),
                     child: Stack(
                       children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
-                          height: isExpanded
-                              ? _expandedCardHeight
-                              : _originalCardHeight,
-                          width: isExpanded
-                              ? _expandedCardWidth
-                              : MediaQuery.of(context).size.width -
-                                    (2 * _cardSidePadding),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/bicep-curl.jpg'),
-                              fit: BoxFit.cover,
+                        //Image
+                        Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()
+                            ..rotateY(-_imageRotationAnimation.value),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            height: isExpanded
+                                ? _expandedCardHeight
+                                : _originalCardHeight,
+                            width: isExpanded
+                                ? _expandedCardWidth
+                                : MediaQuery.of(context).size.width -
+                                      (2 * _cardSidePadding),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/bicep-curl.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
+                        //Slight darkening of image
                         AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 300),
                           height: isExpanded
                               ? _expandedCardHeight
                               : _originalCardHeight,
@@ -125,7 +160,7 @@ class _ExerciseCardState extends State<ExerciseCard>
                         ),
                         //Gradient Overlay top left to bottom right
                         AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 300),
                           height: isExpanded
                               ? _expandedCardHeight
                               : _originalCardHeight,
@@ -153,7 +188,7 @@ class _ExerciseCardState extends State<ExerciseCard>
                         ),
                         //Gradient Overlay top right to bottom left
                         AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 300),
                           height: isExpanded
                               ? _expandedCardHeight
                               : _originalCardHeight,
@@ -179,20 +214,107 @@ class _ExerciseCardState extends State<ExerciseCard>
                     ),
                   ),
                 ),
+                //Details Widgets
+                if (isExpanded || _animationController.isAnimating)
+                  Stack(
+                    children: [
+                      //Details Container
+                      FadeTransition(
+                        opacity: _detailsContainerFadeInAnimation,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 100,
+                            top: 20,
+                            right: 0,
+                            bottom: 0,
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            height: 390,
+                            width: 240,
+                            decoration: BoxDecoration(
+                              color: AppColors.containerColor.withValues(
+                                alpha: 0.8,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              boxShadow: AppShadows.containerShadow,
+                            ),
+                          ),
+                        ),
+                      ),
+                      //Instructions Widget
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 122,
+                          top: 100,
+                          right: 0,
+                          bottom: 0,
+                        ),
+                        child: Column(
+                          spacing: 12,
+                          children: [
+                            FadeTransition(
+                              opacity: _detailsContainerFadeInAnimation,
+                              child: Container(
+                                padding: EdgeInsets.all(16.0),
+                                height: 120,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  color: AppColors.containerColor.withValues(
+                                    alpha: 0.8,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                  boxShadow: AppShadows.containerShadow,
+                                ),
+                              ),
+                            ),
+                            FadeTransition(
+                              opacity: _detailsContainerFadeInAnimation,
+                              child: Container(
+                                padding: EdgeInsets.all(16.0),
+                                height: 120,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  color: AppColors.containerColor.withValues(
+                                    alpha: 0.8,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                  boxShadow: AppShadows.containerShadow,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      //GIF Widget
+                      FadeTransition(opacity: _detailsContainerFadeInAnimation),
+                    ],
+                  ),
                 //Exercise Card Title
                 Padding(
                   padding: EdgeInsets.only(
                     top: 12.0,
-                    left: 0.0,
+                    left: _titlePositionAnimation.value,
                     right: 16.0,
                     bottom: 0.0,
                   ),
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
                     padding: EdgeInsets.symmetric(
                       horizontal: 8.0,
-                      vertical: 4.0,
+                      vertical: _titlePaddingAnimation.value,
                     ),
-                    height: 34,
+                    height: isExpanded
+                        ? _expandedTitleHeight
+                        : _originalTitleHeight,
                     decoration: BoxDecoration(
                       boxShadow: AppShadows.labelShadow,
                       color: AppColors.primaryColor.withValues(alpha: 0.6),
@@ -202,14 +324,14 @@ class _ExerciseCardState extends State<ExerciseCard>
                       widget.exerciseName.toUpperCase(),
                       style: TextStyle(
                         fontFamily: 'BlackOps',
-                        fontSize: 18,
+                        fontSize: _titleFontSizeAniamtion.value,
                         letterSpacing: 1.1,
                         color: AppColors.textColor,
                       ),
                     ),
                   ),
                 ),
-                // Sets and Reps Widget
+                // Sets, Weight and Reps Widget
                 Positioned(
                   bottom: 24,
                   right: 28,

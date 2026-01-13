@@ -5,4 +5,5 @@ class AppColors {
   static const Color textColor = Colors.white;
   static const Color accentColor = Color.fromARGB(255, 186, 142, 146);
   static const Color backgroundColor = Color.fromARGB(255, 27, 23, 23);
+  static const Color containerColor = Color.fromARGB(255, 36, 31, 31);
 }
