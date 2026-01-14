@@ -2,7 +2,6 @@ import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
 import 'package:fitness_app/screens/home/utils/exercise_card_clipper.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:math' show pi;
 
 class ExerciseCard extends StatefulWidget {
@@ -39,17 +38,6 @@ class _ExerciseCardState extends State<ExerciseCard>
   late Animation<double> _descriptionFadeOutAnimation;
 
   bool isExpanded = false;
-
-  final double _originalCardHeight = 160.0;
-  final double _expandedCardHeight = 540.0;
-
-  final double _expandedCardWidth = 240.0;
-
-  final double _cardTopPadding = 32.0;
-  final double _cardSidePadding = 16.0;
-
-  final double _originalTitleHeight = 34;
-  final double _expandedTitleHeight = 40;
 
   @override
   void initState() {
@@ -128,14 +116,25 @@ class _ExerciseCardState extends State<ExerciseCard>
 
   @override
   Widget build(BuildContext context) {
+    final double originalCardHeight = 160.0;
+    final double expandedCardHeight = 540.0;
+
+    final double expandedCardWidth = 240.0;
+
+    final double cardTopPadding = 32.0;
+    final double cardSidePadding = 16.0;
+
+    final double originalTitleHeight = 34;
+    final double expandedTitleHeight = 40;
+
     return GestureDetector(
       onTap: _toggleExpaned,
       child: Padding(
         padding: EdgeInsets.only(
-          left: _cardSidePadding,
+          left: cardSidePadding,
           bottom: 0,
-          right: _cardSidePadding,
-          top: _cardTopPadding,
+          right: cardSidePadding,
+          top: cardTopPadding,
         ),
         child: AnimatedBuilder(
           animation: _animationController,
@@ -159,12 +158,12 @@ class _ExerciseCardState extends State<ExerciseCard>
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             height: isExpanded
-                                ? _expandedCardHeight
-                                : _originalCardHeight,
+                                ? expandedCardHeight
+                                : originalCardHeight,
                             width: isExpanded
-                                ? _expandedCardWidth
+                                ? expandedCardWidth
                                 : MediaQuery.of(context).size.width -
-                                      (2 * _cardSidePadding),
+                                      (2 * cardSidePadding),
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage(
@@ -179,12 +178,12 @@ class _ExerciseCardState extends State<ExerciseCard>
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           height: isExpanded
-                              ? _expandedCardHeight
-                              : _originalCardHeight,
+                              ? expandedCardHeight
+                              : originalCardHeight,
                           width: isExpanded
-                              ? _expandedCardWidth
+                              ? expandedCardWidth
                               : MediaQuery.of(context).size.width -
-                                    (2 * _cardSidePadding),
+                                    (2 * cardSidePadding),
                           color: const Color.fromARGB(
                             255,
                             42,
@@ -196,12 +195,12 @@ class _ExerciseCardState extends State<ExerciseCard>
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           height: isExpanded
-                              ? _expandedCardHeight
-                              : _originalCardHeight,
+                              ? expandedCardHeight
+                              : originalCardHeight,
                           width: isExpanded
-                              ? _expandedCardWidth
+                              ? expandedCardWidth
                               : MediaQuery.of(context).size.width -
-                                    (2 * _cardSidePadding),
+                                    (2 * cardSidePadding),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -224,12 +223,12 @@ class _ExerciseCardState extends State<ExerciseCard>
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           height: isExpanded
-                              ? _expandedCardHeight
-                              : _originalCardHeight,
+                              ? expandedCardHeight
+                              : originalCardHeight,
                           width: isExpanded
-                              ? _expandedCardWidth
+                              ? expandedCardWidth
                               : MediaQuery.of(context).size.width -
-                                    (2 * _cardSidePadding),
+                                    (2 * cardSidePadding),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topRight,
@@ -295,12 +294,7 @@ class _ExerciseCardState extends State<ExerciseCard>
                             FadeTransition(
                               opacity: _instructionsContainerFadeInAnimation,
                               child: Container(
-                                padding: EdgeInsets.only(
-                                  top: 8.0,
-                                  bottom: 16.0,
-                                  left: 16.0,
-                                  right: 16.0,
-                                ),
+                                padding: EdgeInsets.all(16.0),
                                 height: 200,
                                 width: 250,
                                 decoration: BoxDecoration(
@@ -316,7 +310,14 @@ class _ExerciseCardState extends State<ExerciseCard>
                                   itemCount: widget.exerciseInstructions.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
+                                      padding:
+                                          (index ==
+                                              widget
+                                                      .exerciseInstructions
+                                                      .length -
+                                                  1)
+                                          ? EdgeInsets.only(bottom: 0)
+                                          : EdgeInsets.only(bottom: 8.0),
                                       child: Text(
                                         widget.exerciseInstructions.elementAt(
                                           index,
@@ -348,24 +349,14 @@ class _ExerciseCardState extends State<ExerciseCard>
                                   boxShadow: AppShadows.containerShadow,
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://static.exercisedb.dev/media/ztAa1RK.gif",
-                                      fit: BoxFit.cover,
-                                      placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Center(
-                                            child: Icon(
-                                              Icons.error,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                    ),
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    16.0,
+                                  ),
+                                  child: Image.network(
+                                    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXY0ZG5vMXgwOHd6NzMxZjk2bXd3aW5ya2g5aXR1c256NHNva2NjdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GhjexFacI6U7TGCd09/giphy.gif",
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -390,8 +381,8 @@ class _ExerciseCardState extends State<ExerciseCard>
                       vertical: _titlePaddingAnimation.value,
                     ),
                     height: isExpanded
-                        ? _expandedTitleHeight
-                        : _originalTitleHeight,
+                        ? expandedTitleHeight
+                        : originalTitleHeight,
                     decoration: BoxDecoration(
                       boxShadow: AppShadows.labelShadow,
                       color: AppColors.primaryColor.withValues(alpha: 0.6),
