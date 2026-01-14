@@ -2,17 +2,18 @@ import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
 import 'package:fitness_app/screens/home/utils/exercise_card_clipper.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:math' show pi;
 
 class ExerciseCard extends StatefulWidget {
   final String exerciseName;
-  final String description;
+  final List<String> exerciseInstructions;
   final String gifURL;
 
   const ExerciseCard({
     super.key,
     required this.exerciseName,
-    required this.description,
+    required this.exerciseInstructions,
     required this.gifURL,
   });
 
@@ -25,15 +26,22 @@ class _ExerciseCardState extends State<ExerciseCard>
   late AnimationController _animationController;
 
   late Animation<double> _imageRotationAnimation;
+
   late Animation<double> _detailsContainerFadeInAnimation;
+  late Animation<double> _instructionsContainerFadeInAnimation;
+  late Animation<double> _gifContainerFadeInAniamtion;
+
   late Animation<double> _titlePositionAnimation;
   late Animation<double> _titleFontSizeAniamtion;
   late Animation<double> _titlePaddingAnimation;
 
+  late Animation<double> _descriptionFadeInAnimation;
+  late Animation<double> _descriptionFadeOutAnimation;
+
   bool isExpanded = false;
 
   final double _originalCardHeight = 160.0;
-  final double _expandedCardHeight = 420.0;
+  final double _expandedCardHeight = 540.0;
 
   final double _expandedCardWidth = 240.0;
 
@@ -48,7 +56,7 @@ class _ExerciseCardState extends State<ExerciseCard>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
     );
 
     _imageRotationAnimation = Tween<double>(
@@ -56,14 +64,32 @@ class _ExerciseCardState extends State<ExerciseCard>
       end: (pi),
     ).animate(_animationController);
 
-    _detailsContainerFadeInAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_animationController);
+    _detailsContainerFadeInAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.4, 1, curve: Curves.easeInOut),
+          ),
+        );
+
+    _instructionsContainerFadeInAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.6, 1, curve: Curves.easeInOut),
+          ),
+        );
+
+    _gifContainerFadeInAniamtion = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0.8, 1, curve: Curves.easeInOut),
+      ),
+    );
 
     _titlePositionAnimation = Tween<double>(
       begin: 0,
-      end: 95,
+      end: 65,
     ).animate(_animationController);
 
     _titleFontSizeAniamtion = Tween<double>(
@@ -75,6 +101,14 @@ class _ExerciseCardState extends State<ExerciseCard>
       begin: 4,
       end: 6.0,
     ).animate(_animationController);
+
+    _descriptionFadeInAnimation = Tween<double>(begin: 0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Interval(0.3, 1)),
+    );
+
+    _descriptionFadeOutAnimation = Tween<double>(begin: 1.0, end: 0).animate(
+      CurvedAnimation(parent: _animationController, curve: Interval(0.2, 1)),
+    );
   }
 
   @override
@@ -215,7 +249,7 @@ class _ExerciseCardState extends State<ExerciseCard>
                   ),
                 ),
                 //Details Widgets
-                if (isExpanded || _animationController.isAnimating)
+                if (isExpanded)
                   Stack(
                     children: [
                       //Details Container
@@ -223,18 +257,18 @@ class _ExerciseCardState extends State<ExerciseCard>
                         opacity: _detailsContainerFadeInAnimation,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            left: 100,
+                            left: 70,
                             top: 20,
                             right: 0,
                             bottom: 0,
                           ),
                           child: Container(
                             padding: EdgeInsets.all(16.0),
-                            height: 390,
-                            width: 240,
+                            height: 510,
+                            width: 350,
                             decoration: BoxDecoration(
                               color: AppColors.containerColor.withValues(
-                                alpha: 0.8,
+                                alpha: 0.6,
                               ),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
@@ -246,10 +280,10 @@ class _ExerciseCardState extends State<ExerciseCard>
                           ),
                         ),
                       ),
-                      //Instructions Widget
+                      //Details
                       Padding(
                         padding: const EdgeInsets.only(
-                          left: 122,
+                          left: 82,
                           top: 100,
                           right: 0,
                           bottom: 0,
@@ -257,12 +291,18 @@ class _ExerciseCardState extends State<ExerciseCard>
                         child: Column(
                           spacing: 12,
                           children: [
+                            //Instructions Widget
                             FadeTransition(
-                              opacity: _detailsContainerFadeInAnimation,
+                              opacity: _instructionsContainerFadeInAnimation,
                               child: Container(
-                                padding: EdgeInsets.all(16.0),
-                                height: 120,
-                                width: 200,
+                                padding: EdgeInsets.only(
+                                  top: 8.0,
+                                  bottom: 16.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                ),
+                                height: 200,
+                                width: 250,
                                 decoration: BoxDecoration(
                                   color: AppColors.containerColor.withValues(
                                     alpha: 0.8,
@@ -272,14 +312,32 @@ class _ExerciseCardState extends State<ExerciseCard>
                                   ),
                                   boxShadow: AppShadows.containerShadow,
                                 ),
+                                child: ListView.builder(
+                                  itemCount: widget.exerciseInstructions.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        widget.exerciseInstructions.elementAt(
+                                          index,
+                                        ),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
+                            //GIF Widget
                             FadeTransition(
-                              opacity: _detailsContainerFadeInAnimation,
+                              opacity: _gifContainerFadeInAniamtion,
                               child: Container(
                                 padding: EdgeInsets.all(16.0),
-                                height: 120,
-                                width: 200,
+                                height: 200,
+                                width: 250,
                                 decoration: BoxDecoration(
                                   color: AppColors.containerColor.withValues(
                                     alpha: 0.8,
@@ -288,14 +346,33 @@ class _ExerciseCardState extends State<ExerciseCard>
                                     Radius.circular(20),
                                   ),
                                   boxShadow: AppShadows.containerShadow,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://static.exercisedb.dev/media/ztAa1RK.gif",
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Center(
+                                            child: Icon(
+                                              Icons.error,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      //GIF Widget
-                      FadeTransition(opacity: _detailsContainerFadeInAnimation),
                     ],
                   ),
                 //Exercise Card Title
@@ -332,84 +409,172 @@ class _ExerciseCardState extends State<ExerciseCard>
                   ),
                 ),
                 // Sets, Weight and Reps Widget
-                Positioned(
-                  bottom: 24,
-                  right: 28,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 8.0,
-                    children: [
-                      //Weight
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 2.0,
-                        ),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(4),
-                          boxShadow: AppShadows.descriptionlabelShadow,
-                        ),
-                        child: Text(
-                          "60 lbs",
-                          style: TextStyle(
-                            fontFamily: 'BlackOps',
-                            fontSize: 14,
-                            letterSpacing: -0.12,
-                            color: AppColors.textColor,
-                          ),
-                        ),
-                      ),
+                (isExpanded)
+                    //Expanded Sets Reps and Weight Position
+                    ? Positioned(
+                        top: 62,
+                        left: 88,
+                        child: FadeTransition(
+                          opacity: _descriptionFadeInAnimation,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 8.0,
+                            children: [
+                              //Weight
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "60 lbs",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
 
-                      //Sets
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 2.0,
-                        ),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(4),
-                          boxShadow: AppShadows.descriptionlabelShadow,
-                        ),
-                        child: Text(
-                          "Sets: 4",
-                          style: TextStyle(
-                            fontFamily: 'BlackOps',
-                            fontSize: 14,
-                            letterSpacing: -0.12,
-                            color: AppColors.textColor,
-                          ),
-                        ),
-                      ),
+                              //Sets
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "Sets: 4",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
 
-                      //Reps
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 2.0,
+                              //Reps
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "Reps: 12",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(4),
-                          boxShadow: AppShadows.descriptionlabelShadow,
-                        ),
-                        child: Text(
-                          "Reps: 12",
-                          style: TextStyle(
-                            fontFamily: 'BlackOps',
-                            fontSize: 14,
-                            letterSpacing: -0.12,
-                            color: AppColors.textColor,
+                      )
+                    :
+                      //Normal Sets Reps and Weight Position
+                      Positioned(
+                        bottom: 24,
+                        right: 28,
+                        child: FadeTransition(
+                          opacity: _descriptionFadeOutAnimation,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 8.0,
+                            children: [
+                              //Weight
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "60 lbs",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
+
+                              //Sets
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "Sets: 4",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
+
+                              //Reps
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: AppShadows.descriptionlabelShadow,
+                                ),
+                                child: Text(
+                                  "Reps: 12",
+                                  style: TextStyle(
+                                    fontFamily: 'BlackOps',
+                                    fontSize: 14,
+                                    letterSpacing: -0.12,
+                                    color: AppColors.textColor,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ],
             );
           },

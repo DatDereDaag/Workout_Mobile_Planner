@@ -30,6 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     'waist',
   ];
 
+  final List<String> instructions = [
+    "Step:1 Lie flat on your back with your legs straight and your arms extended overhead, holding the band.",
+    "Step:2 Engage your abs and lift your legs and upper body off the ground simultaneously, reaching your hands towards your toes.",
+    "Step:3 As you lower your legs and upper body back down, switch the position of your legs, crossing one over the other.",
+    "Step:4 Repeat the movement, alternating the position of your legs with each repetition.",
+    "Step:5 Continue for the desired number of repetitions.",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           return ExerciseCard(
             exerciseName: "exercise Name",
-            description: "description",
+            exerciseInstructions: instructions,
             gifURL: "gifURL",
           );
         },
