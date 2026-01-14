@@ -1,3 +1,4 @@
+import 'package:fitness_app/screens/home/widgets/clock.dart';
 import 'package:fitness_app/screens/home/widgets/exercise_card.dart';
 import 'package:flutter/material.dart';
 
@@ -41,16 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return ExerciseCard(
-            exerciseName: "exercise Name",
-            exerciseInstructions: instructions,
-            gifURL: "gifURL",
-          );
-        },
-      ),
+      body: Column(children: [SizedBox(height: 50), Clock()]),
+      // body: ListView.builder(
+      //   itemCount: 4,
+      //   itemBuilder: (context, index) {
+      //     return ExerciseCard(
+      //       exerciseName: "exercise Name",
+      //       exerciseInstructions: instructions,
+      //       gifURL: "gifURL",
+      //     );
+      //   },
+      // ),
     );
   }
 }

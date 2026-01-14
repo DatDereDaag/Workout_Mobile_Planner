@@ -1,3 +1,4 @@
+import 'package:fitness_app/constants/colors.dart';
 import 'package:flutter/painting.dart';
 
 class AppShadows {
@@ -73,6 +74,15 @@ class AppShadows {
       blurRadius: 5,
       spreadRadius: 0,
       offset: Offset(0, -3),
+    ),
+  ];
+
+  static const List<BoxShadow> clockShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(75, 12, 12, 0.77),
+      offset: Offset(-13, 8),
+      blurRadius: 4,
+      spreadRadius: -10,
     ),
   ];
 }

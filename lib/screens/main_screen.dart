@@ -1,5 +1,5 @@
 import 'package:fitness_app/constants/colors.dart';
-import 'package:fitness_app/screens/calendar/views/calendar_screen.dart';
+import 'package:fitness_app/screens/workouts/views/workouts_screen.dart';
 import 'package:fitness_app/screens/catalogue/views/catalogue_screen.dart';
 import 'package:fitness_app/screens/home/views/home_screen.dart';
 import 'package:fitness_app/screens/profile/views/profile_screen.dart';
@@ -17,15 +17,15 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> screens = const [
     HomeScreen(),
+    WorkoutScreen(),
     CatalogueScreen(),
-    CalendarScreen(),
     ProfileScreen(),
   ];
 
   final List<String> screenTitles = const [
     'Home',
+    'Workouts',
     'Catalogue',
-    'Calendar',
     'Profile',
   ];
 
@@ -61,12 +61,12 @@ class _MainScreenState extends State<MainScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books_rounded),
-            label: 'Catalogue',
+            icon: Icon(Icons.fitness_center),
+            label: 'Workouts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
+            icon: Icon(Icons.library_books_rounded),
+            label: 'Catalogue',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
