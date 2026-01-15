@@ -1,6 +1,9 @@
+import 'package:fitness_app/screens/home/widgets/button.dart';
 import 'package:fitness_app/screens/home/widgets/clock.dart';
 import 'package:fitness_app/screens/home/widgets/exercise_card.dart';
+import 'package:fitness_app/screens/home/widgets/workout_card.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,7 +45,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [SizedBox(height: 50), Clock()]),
+      body: Column(
+        children: [
+          SizedBox(height: 24),
+          Clock(),
+          SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+            child: Container(
+              padding: EdgeInsets.all(4),
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: Text(
+                "Welcome!",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          Button(text: "Create Workout"),
+          SizedBox(height: 12),
+          //Workout Container
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.4),
+              ),
+              child: WorkoutCard(),
+            ),
+          ),
+        ],
+      ),
       // body: ListView.builder(
       //   itemCount: 4,
       //   itemBuilder: (context, index) {

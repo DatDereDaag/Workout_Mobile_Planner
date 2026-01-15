@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
@@ -56,25 +57,29 @@ class _ClockState extends State<Clock> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        //Red Curves Styling
         Padding(
           padding: const EdgeInsets.only(left: 24, right: 24),
-          child: Container(
-            height: 250,
-            transform: Matrix4.identity()..rotateX(0.5),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                stops: [0, 0.3, 0.7, 1],
-                colors: [
-                  AppColors.primaryColor,
-                  AppColors.backgroundColor,
-                  AppColors.backgroundColor,
-                  AppColors.primaryColor,
-                ],
+          child: Transform.rotate(
+            alignment: Alignment.center,
+            angle: -pi / 72,
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  stops: [0.1, 0.3, 0.7, 1],
+                  colors: [
+                    AppColors.primaryColor,
+                    AppColors.backgroundColor,
+                    AppColors.backgroundColor,
+                    AppColors.primaryColor,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(100),
               ),
-              borderRadius: BorderRadius.circular(100),
             ),
           ),
         ),
@@ -92,9 +97,11 @@ class _ClockState extends State<Clock> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: [0.8, 1],
+                stops: [0.1, 0.2, 0.8, 1],
                 colors: [
-                  AppColors.containerColor.withValues(alpha: 0.5),
+                  AppColors.primaryColor.withValues(alpha: 0.8),
+                  AppColors.containerColor.withValues(alpha: 0.8),
+                  AppColors.containerColor.withValues(alpha: 0.8),
                   AppColors.primaryColor.withValues(alpha: 0.8),
                 ],
               ),
@@ -106,7 +113,9 @@ class _ClockState extends State<Clock> {
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'Hindsight2020',
-                fontSize: 50,
+                fontSize: 56,
+                fontStyle: FontStyle.italic,
+                letterSpacing: 0.24,
               ),
             ),
           ),
