@@ -1,3 +1,5 @@
+import 'package:fitness_app/constants/colors.dart';
+import 'package:fitness_app/constants/shadows.dart';
 import 'package:fitness_app/screens/home/widgets/button.dart';
 import 'package:fitness_app/screens/home/widgets/clock.dart';
 import 'package:fitness_app/screens/home/widgets/exercise_card.dart';
@@ -49,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           SizedBox(height: 24),
           Clock(),
-          SizedBox(height: 8),
           Padding(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
             child: Container(
@@ -66,15 +67,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(height: 12),
+
           Button(text: "Create Workout"),
-          SizedBox(height: 12),
+          SizedBox(height: 32),
           //Workout Container
           Expanded(
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                boxShadow: AppShadows.labelShadow,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight,
+                  colors: [AppColors.backgroundColor, AppColors.primaryColor],
+                ),
               ),
               child: WorkoutCard(),
             ),
