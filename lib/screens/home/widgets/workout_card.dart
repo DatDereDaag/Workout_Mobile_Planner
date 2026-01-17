@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
+import 'package:fitness_app/screens/home/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutCard extends StatefulWidget {
@@ -65,7 +66,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                       Colors.black.withValues(alpha: 0.1),
                       AppColors.backgroundColor.withValues(alpha: 0.4),
                       AppColors.backgroundColor.withValues(alpha: 0.4),
-                      AppColors.primaryColor.withValues(alpha: 1),
+                      AppColors.primaryColor.withValues(alpha: 0.5),
                     ],
                     stops: [0.0, 0.4, 0.5, 1.0],
                   ),
@@ -126,7 +127,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                       Colors.black.withValues(alpha: 0.1),
                       AppColors.backgroundColor.withValues(alpha: 0.4),
                       AppColors.backgroundColor.withValues(alpha: 0.4),
-                      AppColors.primaryColor.withValues(alpha: 1),
+                      AppColors.primaryColor.withValues(alpha: 0.5),
                     ],
                     stops: [0.0, 0.4, 0.5, 1.0],
                   ),
@@ -174,12 +175,25 @@ class _WorkoutCardState extends State<WorkoutCard> {
                   Colors.black.withValues(alpha: 0.1),
                   AppColors.backgroundColor.withValues(alpha: 0.4),
                   AppColors.backgroundColor.withValues(alpha: 0.4),
-                  AppColors.primaryColor.withValues(alpha: 1),
+                  AppColors.primaryColor.withValues(alpha: 0.5),
                 ],
                 stops: [0.0, 0.4, 0.5, 1.0],
               ),
               borderRadius: BorderRadius.circular(20),
             ),
+          ),
+        ),
+
+        //Buttons
+        Positioned(
+          bottom: 50,
+          right: 30,
+          child: Column(
+            children: [
+              Button(text: "View Workout"),
+              SizedBox(height: 12),
+              Button(text: "Start Workout"),
+            ],
           ),
         ),
       ],

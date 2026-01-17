@@ -78,16 +78,16 @@ class AppShadows {
 
   static const List<BoxShadow> buttonShadow = [
     BoxShadow(
-      color: Color.fromRGBO(0, 0, 0, 0.16),
-      blurRadius: 6,
+      color: Color.fromRGBO(0, 0, 0, 0.3),
+      blurRadius: 38,
       spreadRadius: 0,
-      offset: Offset(0, 3),
+      offset: Offset(0, 19),
     ),
     BoxShadow(
-      color: Color.fromRGBO(0, 0, 0, 0.23),
-      blurRadius: 6,
+      color: Color.fromRGBO(0, 0, 0, 0.22),
+      blurRadius: 12,
       spreadRadius: 0,
-      offset: Offset(0, 3),
+      offset: Offset(0, 15),
     ),
   ];
 }

@@ -73,8 +73,8 @@ class _ClockState extends State<Clock> {
                   stops: [0.1, 0.3, 0.7, 1],
                   colors: [
                     AppColors.primaryColor,
-                    AppColors.backgroundColor,
-                    AppColors.backgroundColor,
+                    Colors.transparent,
+                    Colors.transparent,
                     AppColors.primaryColor,
                   ],
                 ),
@@ -106,7 +106,7 @@ class _ClockState extends State<Clock> {
                 ],
               ),
 
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(50),
             ),
             child: Text(
               _clockTime,

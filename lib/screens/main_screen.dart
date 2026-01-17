@@ -51,24 +51,24 @@ class _MainScreenState extends State<MainScreen> {
         selectedLabelStyle: TextStyle(
           color: AppColors.textColor,
           fontSize: 14,
-          fontFamily: 'Hindsight2020',
+          fontFamily: 'BlackOps',
         ),
         unselectedLabelStyle: TextStyle(
           color: AppColors.accentColor,
           fontSize: 14,
-          fontFamily: 'Hindsight2020',
+          fontFamily: 'BlackOps',
         ),
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
-            label: 'Workouts',
+            label: 'WORKOUTS',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books_rounded),
-            label: 'Catalogue',
+            label: 'CATALOGUE',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'PROFILE'),
         ],
       ),
     );

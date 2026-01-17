@@ -15,21 +15,29 @@ class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
-      alignment: Alignment.center,
-      height: 50,
-      width: 160,
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: AppShadows.buttonShadow,
-        color: AppColors.primaryColor,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.buttonColor.withValues(alpha: 1),
+            AppColors.buttonColor2.withValues(alpha: 1),
+            AppColors.buttonColor.withValues(alpha: 1),
+          ],
+        ),
       ),
       child: Text(
         widget.text,
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
           fontFamily: 'ExpletusSans',
+          color: Colors.white,
+          fontWeight: FontWeight.w900,
+          fontStyle: FontStyle.italic,
+          letterSpacing: 0.24,
+          fontSize: 20,
         ),
       ),
     );

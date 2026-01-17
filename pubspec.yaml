@@ -66,6 +66,8 @@ flutter:
     - assets/images/squat.jpg
     - assets/images/calves.jpg
     - assets/images/deadlift.jpg
+    - assets/images/background.jpg
+    - assets/images/background2.jpg
     - .env
   fonts:
     - family: Hindsight2020

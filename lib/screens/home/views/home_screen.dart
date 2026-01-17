@@ -1,11 +1,8 @@
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
-import 'package:fitness_app/screens/home/widgets/button.dart';
 import 'package:fitness_app/screens/home/widgets/clock.dart';
-import 'package:fitness_app/screens/home/widgets/exercise_card.dart';
 import 'package:fitness_app/screens/home/widgets/workout_card.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,60 +44,103 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 24),
-          Clock(),
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
-            child: Container(
-              padding: EdgeInsets.all(4),
-              alignment: Alignment.center,
-              width: double.infinity,
-              child: Text(
-                "Welcome!",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.white,
+          //Background Image
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background2.jpg'),
+                fit: BoxFit.cover,
+                alignment: Alignment.topRight,
+                opacity: 0.2,
+                colorFilter: ColorFilter.mode(
+                  AppColors.backgroundColor,
+                  BlendMode.hue,
                 ),
               ),
             ),
           ),
-
-          Button(text: "Create Workout"),
-          SizedBox(height: 32),
-          //Workout Container
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: AppShadows.labelShadow,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.topRight,
-                  colors: [AppColors.backgroundColor, AppColors.primaryColor],
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.topRight,
+                colors: [
+                  AppColors.buttonColor.withValues(alpha: 0.2),
+                  AppColors.backgroundColor.withValues(alpha: 0.5),
+                  AppColors.backgroundColor.withValues(alpha: 0.5),
+                  AppColors.buttonColor.withValues(alpha: 0.2),
+                ],
+                stops: [0.0, 0.4, 0.5, 1.0],
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              SizedBox(height: 24),
+              Clock(),
+              Transform.translate(
+                offset: Offset(0, -25),
+                child: Padding(
+                  padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: Text(
+                      "Welcome!",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white,
+                        fontFamily: "ExpletusSans",
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: WorkoutCard(),
-            ),
+
+              SizedBox(height: 32),
+              //Workout Container
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    boxShadow: AppShadows.labelShadow,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.backgroundColor,
+                        AppColors.primaryColor.withValues(alpha: 0.5),
+                      ],
+                    ),
+                  ),
+                  child: WorkoutCard(),
+                ),
+              ),
+            ],
           ),
         ],
+        // body: ListView.builder(
+        //   itemCount: 4,
+        //   itemBuilder: (context, index) {
+        //     return ExerciseCard(
+        //       exerciseName: "exercise Name",
+        //       exerciseInstructions: instructions,
+        //       gifURL: "gifURL",
+        //     );
+        //   },
+        // ),
       ),
-      // body: ListView.builder(
-      //   itemCount: 4,
-      //   itemBuilder: (context, index) {
-      //     return ExerciseCard(
-      //       exerciseName: "exercise Name",
-      //       exerciseInstructions: instructions,
-      //       gifURL: "gifURL",
-      //     );
-      //   },
-      // ),
     );
   }
 }
