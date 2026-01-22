@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
+import 'package:fitness_app/screens/home/views/current_workout_screen.dart';
 import 'package:fitness_app/screens/home/widgets/button.dart';
+import 'package:fitness_app/screens/workouts/views/workouts_screen.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutCard extends StatefulWidget {
-  const WorkoutCard({super.key});
+  final Function(String)? onButtonPressed;
+  const WorkoutCard({super.key, this.onButtonPressed});
 
   @override
   State<WorkoutCard> createState() => _WorkoutCardState();
@@ -16,13 +19,14 @@ class _WorkoutCardState extends State<WorkoutCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
+  late Animation<double> _fadeInAnimation;
+
   late Animation<double> _lastCardRotation;
   late Animation<double> _secondCardRotation;
   late Animation<double> _firstCardRotation;
 
   late Animation<Offset> _lastCardTranslation;
   late Animation<Offset> _secondCardTranslation;
-  late Animation<Offset> _firstCardTranslation;
 
   late Animation<double> _firstNewCardRotAnim;
   late Animation<double> _secondNewCardRotAnim;
@@ -59,6 +63,10 @@ class _WorkoutCardState extends State<WorkoutCard>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
+    );
+
+    _fadeInAnimation = Tween<double>(begin: 1.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Interval(0.5, 1)),
     );
 
     _lastCardRotation =
@@ -153,7 +161,7 @@ class _WorkoutCardState extends State<WorkoutCard>
     super.dispose();
   }
 
-  void togglePageChange() {
+  void toggleAnimation() {
     setState(() {
       cardsAnimating = true;
       _animationController.forward();
@@ -162,16 +170,272 @@ class _WorkoutCardState extends State<WorkoutCard>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            //Last Card
-            Transform.translate(
-              offset: _lastCardTranslation.value,
-              child: Transform.rotate(
-                angle: _lastCardRotation.value,
+    return FadeTransition(
+      opacity: _fadeInAnimation,
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Stack(
+            children: [
+              //Last Card
+              Transform.translate(
+                offset: _lastCardTranslation.value,
+                child: Transform.rotate(
+                  angle: _lastCardRotation.value,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.only(
+                      top: 40,
+                      left: 16,
+                      right: 16,
+                      bottom: 16,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        boxShadow: AppShadows.labelShadow,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/ab.jpg'),
+                          opacity: 0.2,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //Gradient Over Last Card
+              Transform.translate(
+                offset: _lastCardTranslation.value,
+                child: Transform.rotate(
+                  angle: _lastCardRotation.value,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.only(
+                      top: 40,
+                      left: 16,
+                      right: 16,
+                      bottom: 16,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.1),
+                            AppColors.backgroundColor.withValues(alpha: 0.4),
+                            AppColors.backgroundColor.withValues(alpha: 0.4),
+                            AppColors.primaryColor.withValues(alpha: 0.5),
+                          ],
+                          stops: [0.0, 0.4, 0.5, 1.0],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //Second Card
+              Transform.translate(
+                offset: _secondCardTranslation.value,
+                child: Transform.rotate(
+                  angle: _secondCardRotation.value,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.only(
+                      top: 40,
+                      left: 16,
+                      right: 16,
+                      bottom: 16,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        boxShadow: AppShadows.labelShadow,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/squat.jpg'),
+                          opacity: 0.5,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //Gradient Over 2nd Card
+              Transform.translate(
+                offset: _secondCardTranslation.value,
+                child: Transform.rotate(
+                  angle: _secondCardRotation.value,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.only(
+                      top: 40,
+                      left: 16,
+                      right: 16,
+                      bottom: 16,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.1),
+                            AppColors.backgroundColor.withValues(alpha: 0.4),
+                            AppColors.backgroundColor.withValues(alpha: 0.4),
+                            AppColors.primaryColor.withValues(alpha: 0.5),
+                          ],
+                          stops: [0.0, 0.4, 0.5, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //Extra Cards For Animation
+              if (cardsAnimating)
+                Stack(
+                  children: [
+                    //First New Card After
+                    Transform.translate(
+                      offset: _firstNewCardTranslation.value,
+                      child: Transform.rotate(
+                        angle: _firstNewCardRotAnim.value,
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.only(
+                            top: 40,
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              boxShadow: AppShadows.labelShadow,
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/bicep-curl.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Transform.translate(
+                      offset: _firstNewCardTranslation.value,
+                      child: Transform.rotate(
+                        angle: _firstNewCardRotAnim.value,
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.only(
+                            top: 40,
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.1),
+                                  AppColors.backgroundColor.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  AppColors.backgroundColor.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  AppColors.primaryColor.withValues(alpha: 0.5),
+                                ],
+                                stops: [0.0, 0.4, 0.5, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //Second New Card After
+                    Transform.translate(
+                      offset: _secondNewCardTranslation.value,
+                      child: Transform.rotate(
+                        angle: _secondNewCardRotAnim.value,
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.only(
+                            top: 40,
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              boxShadow: AppShadows.labelShadow,
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/bicep-curl.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Transform.translate(
+                      offset: _secondNewCardTranslation.value,
+                      child: Transform.rotate(
+                        angle: _secondNewCardRotAnim.value,
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.only(
+                            top: 40,
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.1),
+                                  AppColors.backgroundColor.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  AppColors.backgroundColor.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  AppColors.primaryColor.withValues(alpha: 0.5),
+                                ],
+                                stops: [0.0, 0.4, 0.5, 1.0],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+              //First Card
+              Transform.rotate(
+                angle: _firstCardRotation.value,
                 child: Padding(
                   padding: EdgeInsetsGeometry.only(
                     top: 40,
@@ -185,21 +449,17 @@ class _WorkoutCardState extends State<WorkoutCard>
                       boxShadow: AppShadows.labelShadow,
                       borderRadius: BorderRadius.circular(20),
                       image: DecorationImage(
-                        image: AssetImage('assets/images/ab.jpg'),
-                        opacity: 0.2,
+                        image: AssetImage('assets/images/bicep-curl.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            //Gradient Over Last Card
-            Transform.translate(
-              offset: _lastCardTranslation.value,
-              child: Transform.rotate(
-                angle: _lastCardRotation.value,
+              //Gradient Over First Card
+              Transform.rotate(
+                angle: _firstCardRotation.value,
                 child: Padding(
                   padding: EdgeInsetsGeometry.only(
                     top: 40,
@@ -226,274 +486,33 @@ class _WorkoutCardState extends State<WorkoutCard>
                   ),
                 ),
               ),
-            ),
 
-            //Second Card
-            Transform.translate(
-              offset: _secondCardTranslation.value,
-              child: Transform.rotate(
-                angle: _secondCardRotation.value,
-                child: Padding(
-                  padding: EdgeInsetsGeometry.only(
-                    top: 40,
-                    left: 16,
-                    right: 16,
-                    bottom: 16,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      boxShadow: AppShadows.labelShadow,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/squat.jpg'),
-                        opacity: 0.5,
-                        fit: BoxFit.cover,
-                      ),
+              //Buttons
+              Positioned(
+                bottom: 50,
+                right: 30,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        toggleAnimation();
+                        await widget.onButtonPressed?.call('view');
+                        await _animationController.forward();
+                      },
+                      child: Button(text: "View Workout"),
                     ),
-                  ),
+                    SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: toggleAnimation,
+                      child: Button(text: "Start Workout"),
+                    ),
+                  ],
                 ),
               ),
-            ),
-
-            //Gradient Over 2nd Card
-            Transform.translate(
-              offset: _secondCardTranslation.value,
-              child: Transform.rotate(
-                angle: _secondCardRotation.value,
-                child: Padding(
-                  padding: EdgeInsetsGeometry.only(
-                    top: 40,
-                    left: 16,
-                    right: 16,
-                    bottom: 16,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.1),
-                          AppColors.backgroundColor.withValues(alpha: 0.4),
-                          AppColors.backgroundColor.withValues(alpha: 0.4),
-                          AppColors.primaryColor.withValues(alpha: 0.5),
-                        ],
-                        stops: [0.0, 0.4, 0.5, 1.0],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            //Extra Cards For Animation
-            if (cardsAnimating)
-              Stack(
-                children: [
-                  //First New Card After
-                  Transform.translate(
-                    offset: _firstNewCardTranslation.value,
-                    child: Transform.rotate(
-                      angle: _firstNewCardRotAnim.value,
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(
-                          top: 40,
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            boxShadow: AppShadows.labelShadow,
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/bicep-curl.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Transform.translate(
-                    offset: _firstNewCardTranslation.value,
-                    child: Transform.rotate(
-                      angle: _firstNewCardRotAnim.value,
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(
-                          top: 40,
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.1),
-                                AppColors.backgroundColor.withValues(
-                                  alpha: 0.4,
-                                ),
-                                AppColors.backgroundColor.withValues(
-                                  alpha: 0.4,
-                                ),
-                                AppColors.primaryColor.withValues(alpha: 0.5),
-                              ],
-                              stops: [0.0, 0.4, 0.5, 1.0],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  //Second New Card After
-                  Transform.translate(
-                    offset: _secondNewCardTranslation.value,
-                    child: Transform.rotate(
-                      angle: _secondNewCardRotAnim.value,
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(
-                          top: 40,
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            boxShadow: AppShadows.labelShadow,
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/bicep-curl.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Transform.translate(
-                    offset: _secondNewCardTranslation.value,
-                    child: Transform.rotate(
-                      angle: _secondNewCardRotAnim.value,
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(
-                          top: 40,
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.1),
-                                AppColors.backgroundColor.withValues(
-                                  alpha: 0.4,
-                                ),
-                                AppColors.backgroundColor.withValues(
-                                  alpha: 0.4,
-                                ),
-                                AppColors.primaryColor.withValues(alpha: 0.5),
-                              ],
-                              stops: [0.0, 0.4, 0.5, 1.0],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-            //First Card
-            Transform.rotate(
-              angle: _firstCardRotation.value,
-              child: Padding(
-                padding: EdgeInsetsGeometry.only(
-                  top: 40,
-                  left: 16,
-                  right: 16,
-                  bottom: 16,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    boxShadow: AppShadows.labelShadow,
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/bicep-curl.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            //Gradient Over First Card
-            Transform.rotate(
-              angle: _firstCardRotation.value,
-              child: Padding(
-                padding: EdgeInsetsGeometry.only(
-                  top: 40,
-                  left: 16,
-                  right: 16,
-                  bottom: 16,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.1),
-                        AppColors.backgroundColor.withValues(alpha: 0.4),
-                        AppColors.backgroundColor.withValues(alpha: 0.4),
-                        AppColors.primaryColor.withValues(alpha: 0.5),
-                      ],
-                      stops: [0.0, 0.4, 0.5, 1.0],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-            ),
-
-            //Buttons
-            Positioned(
-              bottom: 50,
-              right: 30,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: togglePageChange,
-                    child: Button(text: "View Workout"),
-                  ),
-                  SizedBox(height: 12),
-                  GestureDetector(
-                    onTap: togglePageChange,
-                    child: Button(text: "Start Workout"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }
