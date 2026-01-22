@@ -48,8 +48,8 @@ class _WorkoutCardState extends State<WorkoutCard>
   final double _firstNewCardRotation = -pi / 10;
   final Offset _firstNewCardPos = Offset(-20, -110);
 
-  final double _secondNewCardRotaiton = -pi / 16;
-  final Offset _secondNewCardPos = Offset(0, -60);
+  final double _secondNewCardRotaiton = -pi / 20;
+  final Offset _secondNewCardPos = Offset(0, -80);
 
   bool cardsAnimating = false;
 
@@ -58,54 +58,93 @@ class _WorkoutCardState extends State<WorkoutCard>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 800),
     );
 
-    _lastCardRotation = Tween<double>(
-      begin: _lastCardOriginalRotation,
-      end: _lastCardNewRotation,
-    ).animate(_animationController);
+    _lastCardRotation =
+        Tween<double>(
+          begin: _lastCardOriginalRotation,
+          end: _lastCardNewRotation,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0, 0.3),
+          ),
+        );
 
-    _lastCardTranslation = Tween<Offset>(
-      begin: _lastCardOriginalPos,
-      end: _lastCardNewPos,
-    ).animate(_animationController);
+    _lastCardTranslation =
+        Tween<Offset>(
+          begin: _lastCardOriginalPos,
+          end: _lastCardNewPos,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0, 0.3),
+          ),
+        );
 
-    _secondCardRotation = Tween<double>(
-      begin: _secondCardOriginalRotation,
-      end: _secondCardNewRotation,
-    ).animate(_animationController);
+    _secondCardRotation =
+        Tween<double>(
+          begin: _secondCardOriginalRotation,
+          end: _secondCardNewRotation,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.1, 0.5),
+          ),
+        );
 
-    _secondCardTranslation = Tween<Offset>(
-      begin: _secondCardOriginalPos,
-      end: _secondCardNewPos,
-    ).animate(_animationController);
+    _secondCardTranslation =
+        Tween<Offset>(
+          begin: _secondCardOriginalPos,
+          end: _secondCardNewPos,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.1, 0.5),
+          ),
+        );
 
-    _firstCardRotation = Tween<double>(
-      begin: 0,
-      end: _firstCardNewRotation,
-    ).animate(_animationController);
+    _firstCardRotation = Tween<double>(begin: 0, end: _firstCardNewRotation)
+        .animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.5, 1),
+          ),
+        );
 
     //Animations For New Instantiated Cards
-    _firstNewCardRotAnim = Tween<double>(
-      begin: 0,
-      end: _firstNewCardRotation,
-    ).animate(_animationController);
+    _firstNewCardRotAnim = Tween<double>(begin: 0, end: _firstNewCardRotation)
+        .animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.3, 0.7),
+          ),
+        );
 
-    _firstNewCardTranslation = Tween<Offset>(
-      begin: Offset(0, 0),
-      end: _firstNewCardPos,
-    ).animate(_animationController);
+    _firstNewCardTranslation =
+        Tween<Offset>(begin: Offset(0, 0), end: _firstNewCardPos).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.3, 0.7),
+          ),
+        );
 
-    _secondNewCardRotAnim = Tween<double>(
-      begin: 0,
-      end: _secondNewCardRotaiton,
-    ).animate(_animationController);
+    _secondNewCardRotAnim = Tween<double>(begin: 0, end: _secondNewCardRotaiton)
+        .animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.4, 0.9),
+          ),
+        );
 
-    _secondNewCardTranslation = Tween<Offset>(
-      begin: Offset(0, 0),
-      end: _secondNewCardPos,
-    ).animate(_animationController);
+    _secondNewCardTranslation =
+        Tween<Offset>(begin: Offset(0, 0), end: _secondNewCardPos).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.4, 0.9),
+          ),
+        );
   }
 
   @override
