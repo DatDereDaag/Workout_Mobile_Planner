@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
-import 'package:fitness_app/screens/home/views/current_workout_screen.dart';
 import 'package:fitness_app/screens/home/widgets/button.dart';
-import 'package:fitness_app/screens/workouts/views/workouts_screen.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutCard extends StatefulWidget {
@@ -503,7 +501,11 @@ class _WorkoutCardState extends State<WorkoutCard>
                     ),
                     SizedBox(height: 12),
                     GestureDetector(
-                      onTap: toggleAnimation,
+                      onTap: () async {
+                        toggleAnimation();
+                        await widget.onButtonPressed?.call('start');
+                        await _animationController.forward();
+                      },
                       child: Button(text: "Start Workout"),
                     ),
                   ],

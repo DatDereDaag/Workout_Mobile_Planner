@@ -1,6 +1,7 @@
 import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/constants/shadows.dart';
 import 'package:fitness_app/screens/home/views/current_workout_screen.dart';
+import 'package:fitness_app/screens/home/views/routine_screen.dart';
 import 'package:fitness_app/screens/home/widgets/clock.dart';
 import 'package:fitness_app/screens/home/widgets/workout_card.dart';
 import 'package:flutter/material.dart';
@@ -150,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         child: WorkoutCard(
                           onButtonPressed: (String action) async {
+                            await _animationController.forward();
                             if (action == 'view') {
-                              await _animationController.forward();
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   pageBuilder:
@@ -177,6 +178,33 @@ class _HomeScreenState extends State<HomeScreen>
                                   ),
                                 ),
                               );
+                              if (action == 'start') {
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAniamtion,
+                                        ) => RoutineScreen(),
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: Duration(
+                                      milliseconds: 500,
+                                    ),
+                                  ),
+                                );
+                              }
                             }
                           },
                         ),
