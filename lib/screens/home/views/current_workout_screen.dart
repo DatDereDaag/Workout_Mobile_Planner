@@ -1,3 +1,4 @@
+import 'package:fitness_app/constants/colors.dart';
 import 'package:fitness_app/screens/home/widgets/exercise_card.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,15 @@ class _CurrentWorkoutScreenState extends State<CurrentWorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Today's Workout",
+          style: TextStyle(fontFamily: 'BlackOps', color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: AppColors.primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
       body: ListView.builder(
         itemCount: 4,
         itemBuilder: (context, index) {

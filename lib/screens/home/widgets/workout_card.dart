@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class WorkoutCard extends StatefulWidget {
   final Function(String)? onButtonPressed;
+
   const WorkoutCard({super.key, this.onButtonPressed});
 
   @override
@@ -162,8 +163,16 @@ class _WorkoutCardState extends State<WorkoutCard>
   void toggleAnimation() {
     setState(() {
       cardsAnimating = true;
-      _animationController.forward();
     });
+
+    _animationController.forward();
+  }
+
+  void reverseAnimation() {
+    setState(() {
+      cardsAnimating = false;
+    });
+    _animationController.reverse();
   }
 
   @override
@@ -495,7 +504,10 @@ class _WorkoutCardState extends State<WorkoutCard>
                       onTap: () async {
                         toggleAnimation();
                         await widget.onButtonPressed?.call('view');
-                        await _animationController.forward();
+
+                        if (mounted) {
+                          reverseAnimation();
+                        }
                       },
                       child: Button(text: "View Workout"),
                     ),
@@ -504,7 +516,10 @@ class _WorkoutCardState extends State<WorkoutCard>
                       onTap: () async {
                         toggleAnimation();
                         await widget.onButtonPressed?.call('start');
-                        await _animationController.forward();
+
+                        if (mounted) {
+                          reverseAnimation();
+                        }
                       },
                       child: Button(text: "Start Workout"),
                     ),

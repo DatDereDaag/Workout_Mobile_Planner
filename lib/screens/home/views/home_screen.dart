@@ -40,14 +40,6 @@ class _HomeScreenState extends State<HomeScreen>
     'waist',
   ];
 
-  final List<String> instructions = [
-    "Step:1 Lie flat on your back with your legs straight and your arms extended overhead, holding the band.",
-    "Step:2 Engage your abs and lift your legs and upper body off the ground simultaneously, reaching your hands towards your toes.",
-    "Step:3 As you lower your legs and upper body back down, switch the position of your legs, crossing one over the other.",
-    "Step:4 Repeat the movement, alternating the position of your legs with each repetition.",
-    "Step:5 Continue for the desired number of repetitions.",
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -149,6 +141,8 @@ class _HomeScreenState extends State<HomeScreen>
                             ],
                           ),
                         ),
+
+                        //Workout Card With Buttons
                         child: WorkoutCard(
                           onButtonPressed: (String action) async {
                             await _animationController.forward();
@@ -178,32 +172,44 @@ class _HomeScreenState extends State<HomeScreen>
                                   ),
                                 ),
                               );
-                              if (action == 'start') {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAniamtion,
-                                        ) => RoutineScreen(),
-                                    transitionsBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
-                                    transitionDuration: Duration(
-                                      milliseconds: 500,
-                                    ),
+
+                              //Checks to see if returned, if so reverse animation
+                              if (mounted) {
+                                await _animationController.forward();
+                                _animationController.reverse();
+                              }
+                            }
+                            if (action == 'start') {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAniamtion,
+                                      ) => RoutineScreen(),
+                                  transitionsBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child,
+                                      ) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                  transitionDuration: Duration(
+                                    milliseconds: 500,
                                   ),
-                                );
+                                ),
+                              );
+
+                              //Checks to see if returned, if so reverse animation
+                              if (mounted) {
+                                await _animationController.forward();
+                                _animationController.reverse();
                               }
                             }
                           },
@@ -213,16 +219,6 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 ),
               ],
-              // body: ListView.builder(
-              //   itemCount: 4,
-              //   itemBuilder: (context, index) {
-              //     return ExerciseCard(
-              //       exerciseName: "exercise Name",
-              //       exerciseInstructions: instructions,
-              //       gifURL: "gifURL",
-              //     );
-              //   },
-              // ),
             ),
           );
         },
